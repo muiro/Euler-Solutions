@@ -78,14 +78,37 @@ exports.problem5 = function() {
 };
 
 exports.problem6 = function() {
-
+	var result = 0;
+	var sum_of_squares = 0;
+	var square_of_sums = 0;
+	for (var i = 1; i <= 100; i++) {
+		sum_of_squares += i * i;
+		square_of_sums += i;
+	}
+	square_of_sums = square_of_sums * square_of_sums;
+	result = square_of_sums - sum_of_squares;
+	return result;
 };
 
 exports.problem7 = function() {
+	var result = 0;
+	var count = 0;
+	var number = 0;
 
+	while (count < 10001) {
+		if (isPrime(number)) {
+			result = number;
+			count++;
+		}
+		number++;
+	}
+
+	return result;
 };
 
 exports.problem8 = function() {
+	var result = 0;
+	var counter = 0;
 	var number = "73167176531330624919225119674426574742355349194934" +
 		"96983520312774506326239578318016984801869478851843" +
 		"85861560789112949495459501737958331952853208805511" +
@@ -106,13 +129,116 @@ exports.problem8 = function() {
 		"84580156166097919133875499200524063689912560717606" +
 		"05886116467109405077541002256983155200055935729725" +
 		"71636269561882670428252483600823257530420752963450";
+
+		while (counter + 13 <= number.length) {
+			var row = number.substring(counter, counter + 13).split("").map(function(e){return Number(e)});
+			var product = row.reduce(function(a, b){
+				return a * b;
+			});
+
+			if (product > result) {
+				result = product;
+			}
+			counter++;
+		}
+
+		return result;
 }
 
 exports.problem9 = function() {
 
+	for (var i = 0; i <= 1000; i++) {
+		if (i + j + k === 1000) {
+			if (k * k + j * j == i * i) {
+				return k*j*i;
+			}
+		} else {
+			for (var j = 0; j <= 1000; j++) {
+				if (i + j + k === 1000) {
+					if (k * k + j * j == i * i) {
+						return k*j*i;
+					}
+				} else {
+					for (var k = 0; k <= 1000; k++) {
+						if (i + j + k === 1000) {
+							if (k * k + j * j == i * i) {
+								return k*j*i;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return 0;
+
 };
 
 exports.problem10 = function() {
+	// the path this solution going down needs work. Takes way too long:
+	// 10,000 numbers: 4814 ms = .481 ms per number
+	// 20,000 numbers: 17655 ms = .882 ms per number
+	// 30,000 numbers: 38079 ms = 1.269 ms per number
+	// 40,000 numbers: 65172 ms = 1.629 ms per number
+	// 50,000 numbers: 100229 ms = 2.004 ms per number
+	// for each 10,000 added, the ms per number tends to increases by ~.4 ms
+	// using this to roughly estimate full time for 2,000,000 numbers:
+	// 2,000,000 / 10,000 = 200 * .4 = 80 ms per number
+	// 80 * 2,000,000 = 160,000,000 ms ~= 45 hours
+	// 
+	// This will need some optimization, perhaps by removing the marked items and only iterating 
+	// through the remaining array, or some mathematical trickery.
+	var start = new Date();
+	var sum = 0;
+	var numbers = [];
+	for (var i = 2; i <= 50000; i++) {
+		numbers.push({value: i, marked: false, prime: false});
+	}
+
+	var p = 2;
+	var checked = numbers.map(function(e){
+		return e.marked;
+	});
+	while (checked.indexOf(false) != -1) {
+		numbers = numbers.map(function(e){
+			if (e.marked == true) {
+				return e;
+			} else if (e.value === p) {
+				e.marked = true;
+				e.prime = true;
+				return e;
+			} else if (e.value % p === 0) {
+				e.marked = true;
+				e.prime = false;
+				return e;
+			} else {
+				return e;
+			}
+		});
+		checked = numbers.map(function(e){
+			return e.marked;
+		});
+		if (checked.indexOf(false) != -1) {
+			p = numbers[checked.indexOf(false)].value;
+		} else {
+			p = null;
+		}
+		
+	}
+
+	var primes = numbers.filter(function(e){
+		return e.prime;
+	});
+
+	var sum = 0;
+	for (var i = 0; i < primes.length; i++) {
+		sum += primes[i].value;
+	}
+
+	var end = new Date();
+	console.log("time: " + (end - start));
+	return sum;
 
 };
 
@@ -251,3 +377,19 @@ exports.problem13 = function() {
 		53503534226472524250874054075591789781264330331690
 	]; 
 }; 
+
+function isPrime(n) {
+	if (n < 2) { 
+		return false; 
+	}
+	var prime = true;
+	for (var i = 2; i <= Math.sqrt(n); i++) {
+		if (n % i === 0) {
+			prime = false;
+			return prime;
+		}
+	}	
+	return prime;
+};
+
+exports.isPrime = isPrime;

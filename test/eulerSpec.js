@@ -4,6 +4,18 @@ var expect = require("chai").expect;
 var euler = require("../euler.js");
 
 describe("euler", function(){
+	describe('#isPrime(n)', function(){
+		it("should should detect whether a number is prime or not", function(){
+			expect(euler.isPrime(2)).to.equal(true);
+			expect(euler.isPrime(571)).to.equal(true);
+			expect(euler.isPrime(5351)).to.equal(true);
+			expect(euler.isPrime(7919)).to.equal(true);
+			expect(euler.isPrime(4)).to.equal(false);
+			expect(euler.isPrime(572)).to.equal(false);
+			expect(euler.isPrime(5352)).to.equal(false);
+			expect(euler.isPrime(7918)).to.equal(false);
+		});
+	});
 	describe('#problem1()', function(){
 		it("should find the sum of all the multiples of 3 or 5 below 1000", function(){
 			var result = euler.problem1();
@@ -50,7 +62,8 @@ describe("euler", function(){
 	describe('#problem8()', function(){
 		it('should find the product of the thirteen adjacent digits in the 1000-digit number that have the greatest product', function(){
 			var result = euler.problem8();
-			expect(result).to.equal(40824);
+			//fixed incorrect result listed on http://code.google.com/p/projecteuler-solutions which was 40824, possibly for an older version of this problem
+			expect(result).to.equal(23514624000);
 		})
 	});
 	describe('#problem9()', function(){
