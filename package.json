@@ -1,0 +1,16 @@
+{
+  "name": "Euler-Solutions",
+  "version": "0.1.0",
+  "description": "Euler Project testing library",
+  "author": "funslug <funslug@funslug.com> (http://funslug.com)",
+  "scripts": {
+    "start": "node --harmony ./euler.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/muiro/Euler-Solutions.git"
+  },
+  "dependencies": {
+    "chai": "^1.9.1"
+  }
+}
